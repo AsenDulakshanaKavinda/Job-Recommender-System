@@ -69,11 +69,7 @@ class LoadConfig:
     def _setup_logging(self):
         log_cfg = self.config.logging
         level = getattr(logging, log_cfg.level)
-        logging.basicConfig(
-            filename=log_cfg.filepath,
-            level=level,
-            format=format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-        )
+        logging.basicConfig(filename=log_cfg.filepath, level=level, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
             
 
 
