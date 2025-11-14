@@ -4,6 +4,7 @@ from typing import Optional
 
 class LoggingConfig(BaseModel):
     level: str = "INFO"
+    # filepath: str
     
     @field_validator("level")
     def validate_level(cls, v):

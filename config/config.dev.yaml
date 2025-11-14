@@ -1,0 +1,7 @@
+logging:
+  level: "INFO"
+  filepath: "logs/test.log"
+
+app:
+  name: "Job Recommender Test"
+  version: "1.0"

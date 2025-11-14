@@ -4,7 +4,7 @@ from pathlib import Path
 import os
 import yaml
 import logging
-from settings import Settings
+from src.job_recommender.core.settings import Settings
 
 
 class LoadConfig:
@@ -24,7 +24,7 @@ class LoadConfig:
             path = Path(config_path)
         else:
             env_path = os.getenv("CONFIG_PATH")
-            path = Path(env_path) if env_path else Path("config") / f"config.{env}.ymal"
+            path = Path(env_path) if env_path else Path("config") / f"config.{env}.yaml"
         
         # if the path is relavent, make it absolute relative to project root
         if not path.is_absolute():
@@ -42,7 +42,7 @@ class LoadConfig:
         self.config_path = path
 
         self._setup_logging()
-        logging.info(f"Loaded successfully from {path} (env={env})")
+        print(f"Loaded successfully from {path} (env={env})")
 
     
 
@@ -69,10 +69,6 @@ class LoadConfig:
     def _setup_logging(self):
         log_cfg = self.config.logging
         level = getattr(logging, log_cfg.level)
-        logging.basicConfig(filename=log_cfg.filepath, level=level, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-            
-
-
-            
+        # logging.basicConfig(filename=log_cfg.filepath, level=level, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s") - if use a file
 
 

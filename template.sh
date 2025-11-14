@@ -39,7 +39,7 @@ mkdir -p src/job_recommender/task
 
 
 
-
+mkdir -p test
 
 
 

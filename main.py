@@ -1,6 +1,3 @@
-def main():
-    print("Hello from job-recommender-system!")
+from test.test_config_loader import test_load
 
-
-if __name__ == "__main__":
-    main()
+test_load()
