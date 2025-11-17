@@ -4,7 +4,7 @@ from pathlib import Path
 import os
 import yaml
 import logging
-from src.job_recommender.core.settings import Settings
+from job_recommender.src.core.settings import Settings
 
 
 class LoadConfig:
@@ -59,10 +59,12 @@ class LoadConfig:
         return Path("config" / "config.yaml")
 
     def _ensure_config_file_exists(self, path: Path):
+        """ check whether config file exists or not """
         if not path.exists():
             raise FileNotFoundError(f"Config file not found: {str(path)}")
 
     def _load_yaml_file(self, path: Path) -> dict:
+        """ read and return the data in yaml file as a dict """
         with open(path, "r", encoding="utf-8") as f:
             return yaml.safe_load(f) or {}
         

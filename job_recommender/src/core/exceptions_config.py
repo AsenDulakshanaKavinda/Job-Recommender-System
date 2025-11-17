@@ -71,7 +71,7 @@ if __name__ == "__main__":
     try:
         result = 10/0
     except Exception as e:
-        raise ProjectException(
+        ProjectException(
             e,
             context={"operation": "division_test", "value": 10}
         )

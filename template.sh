@@ -1,6 +1,4 @@
-mkdir -p data
-mkdir -p output
-mkdir -p outputs
+
 mkdir -p sample_data
 
 # config
@@ -11,33 +9,47 @@ touch config/config.prod.yaml
 
 
 # src
-mkdir -p src
-touch src/__init__.py
+mkdir -p job_recommender
+touch job_recommender/__init__.py
 
-mkdir -p src/job_recommender
-touch src/job_recommender/__init__.py
+mkdir -p job_recommender/src
+touch job_recommender/src/__init__.py
 
-mkdir -p src/job_recommender/ai
-mkdir -p src/job_recommender/cli
 
 # - core -
 # core dir
-mkdir -p src/job_recommender/core
+mkdir -p job_recommender/src/core
 # core files
-touch src/job_recommender/core/__init__.py
-touch src/job_recommender/core/settings.py
-touch src/job_recommender/core/load_config.py
-touch src/job_recommender/core/exceptions_config.py
-touch src/job_recommender/core/logger_config.py
-touch src/job_recommender/core/api_key_config.py
-touch src/job_recommender/core/model_config.py
+touch job_recommender/src/core/__init__.py
+touch job_recommender/src/core/settings.py
+touch job_recommender/src/core/load_config.py
+touch job_recommender/src/core/exceptions_config.py
+touch job_recommender/src/core/logger_config.py
+touch job_recommender/src/core/api_key_config.py
+touch job_recommender/src/core/model_config.py
 
+# loaders
+mkdir -p job_recommender/src/loaders
+touch job_recommender/src/loaders/pdf_loader.py
 
+# loaders
+mkdir -p job_recommender/src/preprocessing
+touch job_recommender/src/preprocessing/preprocessor.py
+touch job_recommender/src/preprocessing/embedder.py
+touch job_recommender/src/preprocessing/scorer.py
 
-mkdir -p src/job_recommender/dashboard
-mkdir -p src/job_recommender/task
+# llm
+mkdir -p job_recommender/src/llm
+touch job_recommender/src/llm/client.py
+touch job_recommender/src/llm/prompts.py
 
+# llm
+mkdir -p job_recommender/src/vector_db
+touch job_recommender/src/vector_db/db_manager.py
 
+# app
+mkdir -p app
+touch app/app.py
 
 mkdir -p test
 
