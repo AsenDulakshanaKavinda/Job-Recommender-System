@@ -20,7 +20,7 @@ class ModelSchema(BaseModel):
     llm: str
     embedding_model: str
 
-class ModelLoader:
+class ModelConfig:
     def __init__(self):
         env = os.getenv("ENV", "dev").lower()
 
