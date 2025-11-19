@@ -7,44 +7,48 @@ import logging
 from job_recommender.src.core.settings import Settings
 
 
-class LoadConfig:
-    def __init__(self, env: str | None = None, config_path: str | None = None):
+class ProjectConfig:
+    def __init__(self, env_provider: str | None = None, config_path: str | None = None):
         """
         env: 'dev'or 'prod' (default: 'dev')
         config_path: override path to YAML config
         """
 
-        self.project_root = self._get_project_root()
+        self._project_root = self._get_project_root()
 
         # determine env
-        env = env or os.getenv("ENV") or "dev"
+        env_provider = env_provider or os.getenv("ENV") or "dev"
 
         # determine env
         if config_path:
             path = Path(config_path)
         else:
             env_path = os.getenv("CONFIG_PATH")
-            path = Path(env_path) if env_path else Path("config") / f"config.{env}.yaml"
+            path = Path(env_path) if env_path else Path("config") / f"config.{env_provider}.yaml"
         
         # if the path is relavent, make it absolute relative to project root
         if not path.is_absolute():
-            path = self.project_root / path
+            path = self._project_root / path
 
         # validate file existence
         self._ensure_config_file_exists(path)
 
         # load yaml file
-        self.raw_config = self._load_yaml_file(path)
+        self._raw_config = self._load_yaml_file(path)
 
+        # todo --- use pydantic to validate this ---
         # validate and parse with pydantic
-        self.config = Settings(**self.raw_config)
+        # self.config = Settings(**self._raw_config)
 
+        # project config
+        self.config = self._raw_config 
+
+        # config path
         self.config_path = path
 
-        self._setup_logging()
-        print(f"Loaded successfully from {path} (env={env})")
+        # self._setup_logging()
+        print(f"Loaded successfully from {path} (env={env_provider})")
 
-    
 
     def _get_project_root(self) -> Path:
         """ project root = 3 dirs above this file """

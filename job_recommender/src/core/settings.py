@@ -1,6 +1,6 @@
 
-from pydantic import BaseModel, field_validator
-from typing import Optional
+from pydantic import BaseModel, field_validator, Field
+from typing import Optional, Dict
 
 class LoggingConfig(BaseModel):
     level: str = "INFO"
@@ -12,8 +12,24 @@ class LoggingConfig(BaseModel):
         if v not in validate_levels:
             raise ValueError(f"Invalid logging level: {v}")
         return v
+    
+class AppConfig(BaseModel):
+    name: str
+    version: str
+
+class LLMConfig(BaseModel):
+    provider: str
+    model_name: str
+    temperature: float = Field(..., ge=0, le=1) # temperature must be in [0, 1]
+
+class EmbeddingModelConfig(BaseModel):
+    provider: str
+    model_name: str
 
 class Settings(BaseModel):
     logging: LoggingConfig
+    app: AppConfig
+    llm: Dict[str, LLMConfig]
+    embedding_model: Dict[str, EmbeddingModelConfig]
 
 

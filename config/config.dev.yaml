@@ -4,4 +4,15 @@ logging:
 
 app:
   name: "Job Recommender Test"
-  version: "1.0"
+  version: "0.1.0"
+
+llm:
+  mistral:
+    provider: "mistral"
+    model_name: "mistral-small-latest"  # Fixed typo from "samll" to "small"
+    temperature: 0.2
+
+embedding_model:
+  mistral:
+    provider: "mistral"
+    model_name: "mistral-embed"

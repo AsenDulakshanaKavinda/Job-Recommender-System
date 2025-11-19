@@ -27,7 +27,7 @@ class ApiKeyConfig:
         keys = config.load() # returns dict of loaded keys 
     """
 
-    REQUIRED_KEYS = ["GROQ_API_KEY", "MISTRAL_API_KEY"]
+    REQUIRED_KEYS: List[str] = ["GROQ_API_KEY", "MISTRAL_API_KEY"]
 
     def __init__(self, env_provider=os.getenv):
         """
@@ -89,7 +89,7 @@ class ApiKeyConfig:
 
     def _validate_keys(self):
         """ Ensure all the required keys are present an non-empty """
-        missing = [key for key in self.REQUIRED_KEYS if not self.api_keys.get(key)]
+        missing = [key for key in self.REQUIRED_KEYS if not self._api_keys.get(key)]
 
         if missing:
             ProjectException (

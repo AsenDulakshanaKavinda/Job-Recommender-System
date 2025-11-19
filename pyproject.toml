@@ -9,4 +9,5 @@ dependencies = [
     "langchain-groq>=1.0.0",
     "langchain-mistralai>=1.0.1",
     "mcp-use>=1.4.0",
+    "tenacity>=9.1.2",
 ]

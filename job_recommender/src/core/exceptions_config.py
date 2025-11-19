@@ -5,7 +5,7 @@
 import sys
 import traceback
 from typing import Optional, Dict, Any
-from logger_config import get_logger
+from job_recommender.src.core.logger_config import get_logger
 
 logger = get_logger()
 

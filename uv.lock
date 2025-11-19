@@ -817,6 +817,7 @@ dependencies = [
     { name = "langchain-groq" },
     { name = "langchain-mistralai" },
     { name = "mcp-use" },
+    { name = "tenacity" },
 ]
 
 [package.metadata]
@@ -825,6 +826,7 @@ requires-dist = [
     { name = "langchain-groq", specifier = ">=1.0.0" },
     { name = "langchain-mistralai", specifier = ">=1.0.1" },
     { name = "mcp-use", specifier = ">=1.4.0" },
+    { name = "tenacity", specifier = ">=9.1.2" },
 ]
 
 [[package]]

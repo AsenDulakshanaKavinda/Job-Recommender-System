@@ -1,1 +1,109 @@
+import os
+from dotenv import load_dotenv
+from pydantic import BaseModel
 
+from langchain_mistralai import ChatMistralAI, MistralAIEmbeddings
+from langchain_groq import ChatGroq
+
+
+from job_recommender.src.core.settings import Settings
+
+from job_recommender.src.core.api_key_config import ApiKeyConfig
+from job_recommender.src.core.project_config import ProjectConfig
+
+from job_recommender.src.core.logger_config import logger as log 
+from job_recommender.src.core.exceptions_config import ProjectException
+
+class ModelSchema(BaseModel):
+    llm: str
+    embedding_model: str
+
+class ModelLoader:
+    def __init__(self):
+        env = os.getenv("ENV", "dev").lower()
+
+        if env != "production":
+            load_dotenv()
+            log.info("RUNNING IN LOCAL/DEV MODE: .env loaded.")
+        else:
+            log.info("RUNNING IN - PRODUCTION - MODE!!!: Using injected env vars.")
+
+        self._api_key_config = ApiKeyConfig(env_provider=env)
+
+        try:
+            raw_config = ProjectConfig(env_provider=env)
+            self._project_config = Settings(**raw_config.config).model_dump()
+            print(self._project_config)
+            log.info("YAML CONFIG LOADED AND VALIDATED.")
+        except Exception as e:
+            log.error(f"config validation error {e}")
+            ProjectException(
+                e,
+                context = {
+                    "operation" : "Model loader"
+                }
+            )
+
+    def llm_model_loader(self):
+        """ 
+        Load the LLM Model according to the configuration in config and env.
+            args: None
+            return : llm
+        """
+        llm_block = self._project_config.get("llm", {})
+        provider_key = os.getenv("LLM_PROVIDER", "mistral")
+        if provider_key not in llm_block:
+            log.warning(f"LLM provider `{provider_key}` not found; falling back to `mistral`")
+            provider_key = 'mistral'
+
+        llm_config = llm_block[provider_key]
+        provider = llm_config.get("provider")
+        model_name = llm_config.get("model_name")
+        temperature = llm_config.get("temperature", 0.2)
+        log.info(f"Loading LLM: Provider={provider}, model={model_name}")
+
+        if provider_key == "mistral":
+            return ChatMistralAI(
+                model_name=model_name,
+                temperature=temperature
+            )
+        else:
+            log.error(f"Unsupported LLM provider: {provider}")
+            ProjectException(
+                "Unsupported LLM provider",
+                context={
+                    "operation": "load llm model"
+                }
+            )
+
+    def embedding_model_loader(self):
+        """ 
+        Load the embedding Model according to the configuration in config and env.
+            args: None
+            return : embedding model
+        """
+        enbedding_block = self._project_config.get("embedding_model", {})
+        provider_key = os.getenv("EMBEDDING_PROVIDER", "mistral")
+        if provider_key not in enbedding_block:
+            log.warning(f"Embedding provider `{provider_key}` not found; falling back to `mistral`")
+            provider_key = 'mistral'
+
+        llm_config = enbedding_block[provider_key]
+        provider = llm_config.get("provider")
+        model_name = llm_config.get("model_name")
+        log.info(f"Loading Embedding: Provider={provider}, model={model_name}")
+
+        if provider_key == "mistral":
+            return MistralAIEmbeddings(
+                model=model_name,
+            )
+        else:
+            log.error(f"Unsupported Embedding provider: {provider}")
+            ProjectException(
+                "Unsupported Embedding provider",
+                context={
+                    "operation": "load embedding model"
+                }
+            )
+
+    

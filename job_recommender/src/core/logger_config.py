@@ -82,6 +82,6 @@ def performance_log(operation: str, duration: float, **kwargs):
     logger = get_logger()
     logger.info(f"PERF: {operation} took {duration:.2f}s")
     
-
+logger = get_logger()
 
 
