@@ -13,6 +13,7 @@ from job_recommender.src.core.logger_config import logging as log
 
 load_dotenv()
 
+
 # todo - add `opentelemetry`
 class ApiKeyConfig:
     """
@@ -27,7 +28,7 @@ class ApiKeyConfig:
         keys = config.load() # returns dict of loaded keys 
     """
 
-    REQUIRED_KEYS: List[str] = ["GROQ_API_KEY", "MISTRAL_API_KEY"]
+    REQUIRED_KEYS: List[str] = ["GROQ_API_KEY", "MISTRAL_API_KEY", "PINECONE_API_KEY"]
 
     def __init__(self, env_provider=os.getenv):
         """
@@ -103,7 +104,7 @@ class ApiKeyConfig:
 
 
 
-
+api_key_config = ApiKeyConfig()
 
 
 

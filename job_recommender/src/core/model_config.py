@@ -111,7 +111,7 @@ class ModelConfig:
             )
 
 
-
+model_config = ModelConfig()
 
 # This decorator applies retry logic to the function it wraps.
 # It uses the 'tenacity' library to handle transient failures automatically.
