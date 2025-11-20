@@ -3,7 +3,7 @@ import sys
 from typing import BinaryIO, List
 import fitz
 
-from langchain_core.document_loaders import PDF
+
 
 from job_recommender.src.core.logger_config import logger as log 
 from job_recommender.src.core.exceptions_config import ProjectException
@@ -15,7 +15,7 @@ class PdfLoader:
         self._ensure_readability()
         
 
-    def text_extractor(self):
+    def text_extractor(self) -> str:
         """
         Extracts text from a PDF file-like object.
 
@@ -123,8 +123,9 @@ class PdfLoader:
 
         try:
             original_pos = self.uploaded_file.tell() # save current position
-            file_size = self.uploaded_file.seek(0, 2) # get the size
-            self.uploaded_file.seek(0) # reset position
+            self.uploaded_file.seek(0, 2)
+            file_size = self.uploaded_file.tell() # get the size
+            self.uploaded_file.seek(original_pos) # reset position
             if file_size > 10 * 1024 * 1024: # 10MB limit
                 log.warning(f"File size {file_size / (1024 * 1024):.2f}MB.")
                 ProjectException(
