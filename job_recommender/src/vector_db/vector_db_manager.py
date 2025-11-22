@@ -100,7 +100,7 @@ class VectorDBManager:
 
     def fetch(self):
         """
-        Retrieving a specific vector and its associated metadata using its unique identifier in metadata.
+        Retrieving a specific vector and its associated metadata using its unique session_id in metadata.
         """
         vectors = self.index.list(prefix=f"{self.session_id}_")
         return vectors

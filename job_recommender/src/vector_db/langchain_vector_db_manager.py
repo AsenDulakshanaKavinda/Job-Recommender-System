@@ -55,7 +55,7 @@ class LangchainVectorDBManager:
         self.index = self.pc.Index(self.index_name)   
 
         # create a langchain vector store wrapper, each session use its own namespace to avoid collisions
-        self.vectrostore = PineconeVectorStore(
+        self.vectorstore = PineconeVectorStore(
             index = self.index,
             embedding = embeddings,
             namespace = self.session_id,
@@ -71,10 +71,10 @@ class LangchainVectorDBManager:
         - store it under the session namespace
         - attach metadata including its source/session
         """
-        self.vectrostore.add_texts(
-            text = text_chunks,
+        self.vectorstore.add_texts(
+            texts = text_chunks,
             metadatas = [{"source": self.session_id} for _ in text_chunks],
-            namespace = self.session_id
+            # namespace = self.session_id
         )
 
     def as_retriever(self, **kwargs):
@@ -82,7 +82,7 @@ class LangchainVectorDBManager:
         return the langchain retriever interface for semantic search
         pass parameters can pass via kwargs
         """
-        return self.vectrostore.as_retriever(search_kwargs = kwargs)
+        return self.vectorstore.as_retriever(search_kwargs = kwargs)
 
     def delete(self):
         """
@@ -117,6 +117,7 @@ class LangchainVectorDBManager:
                     "message": "Unexpected error while loading key"
                 }
             )
+
 
 
 

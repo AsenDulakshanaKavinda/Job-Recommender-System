@@ -6,6 +6,8 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "ipykernel>=7.1.0",
+    "langchain-chroma>=1.0.0",
+    "langchain-community>=0.4.1",
     "langchain-groq>=1.0.0",
     "langchain-mistralai>=1.0.1",
     "langchain-pinecone>=0.2.13",
@@ -13,5 +15,6 @@ dependencies = [
     "mcp-use>=1.4.0",
     "pinecone>=7.3.0",
     "pymupdf>=1.26.6",
+    "pypdf>=6.3.0",
     "tenacity>=9.1.2",
 ]

@@ -87,7 +87,7 @@ class Preprocessor:
             text = re.sub(r"<.*?>", " ", content)
 
             # 2. remove bullets, arrows, checkmarks, stars ...
-            text = re.sub(r"[\u2022\u2023\u25E6\u2043\u2219→✔✓★►▪◦*•-]", " ", text) 
+            text = re.sub(r"[\u2022\u2023\u25E6\u2043\u2219→✔✓★►▪◦*--]", " ", text) 
 
             # 3. remove numbered or letterded lists at start of lines
             text = re.sub(r"^\s*(\d+|[a-zA-Z])[\.\)]\s*", " ", text, flags=re.MULTILINE)
