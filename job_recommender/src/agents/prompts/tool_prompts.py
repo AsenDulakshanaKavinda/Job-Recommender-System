@@ -1,7 +1,8 @@
-from langchain_core.prompts import PromptTemplate
+from langchain_core.prompts import PromptTemplate, ChatPromptTemplate
 
 
-resume_summary_prompt = """
+resume_summary_prompt = ChatPromptTemplate.from_template(
+    """
     You are an expert Resume Analyst and Professional Career Writer specializing in creating
     ATS-optimized resume summaries.
 
@@ -37,8 +38,9 @@ resume_summary_prompt = """
     Here is the resume content to summarize:
     {resume_content}
     """
+)
 
-missing_skills_prompt = PromptTemplate.from_template(
+missing_skills_prompt = ChatPromptTemplate.from_template(
     """
     You are an expert ATS (Applicant Tracking System) Analyst and Resume Auditor. 
     Your task is to evaluate the provided resume content and produce a detailed, technical analysis focused on:
@@ -100,7 +102,7 @@ missing_skills_prompt = PromptTemplate.from_template(
 
 )
 
-rode_map_prompt = PromptTemplate.from_template(
+rode_map_prompt = ChatPromptTemplate.from_template(
     """
     You are a Career Development Strategist and Workforce Planning Specialist. Your task is to create a professional growth roadmap and future-skill plan based on the candidate’s background.
 
@@ -152,7 +154,7 @@ rode_map_prompt = PromptTemplate.from_template(
 )
 
 
-extract_keyword_prompt = PromptTemplate.from_template(
+extract_keyword_prompt = ChatPromptTemplate.from_template(
     """
     You are an expert Career Data Analyst.  
     Your task is to extract job-related keywords from the content provided.  
