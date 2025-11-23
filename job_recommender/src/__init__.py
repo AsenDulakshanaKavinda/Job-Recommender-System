@@ -1,14 +1,31 @@
-"""
-- Job Recommender System using Large Language Models (LLMs) - 
 
-The Job Recommender System is an AI-based platform that leverages Large Language Models (LLMs)
-to analyze a user’s resume summary and generate intelligent, personalized career recommendations. 
-The system performs resume understanding, skill gap analysis, roadmap generation, and keyword-based job retrieval in a structured pipeline.
+# from src.core
+from .core.api_key_config import api_key_config
+from .core.api_key_config import ProjectException
+from .core.logger_config import logger as log, log_api_call
+from .core.model_config import model_config
+from .core.project_config import project_config
+from .core.settings import Settings, session_id
 
-"""
+# from src.loaders
+from .loaders.pdf_loader import PdfLoader
 
-__version__ = "0.0.0"
-__author__ = "Asen Dulakshana Kavinda"
-__email__ = "asendulakshanabse@gmial.com"
-__discription__ = "The Job Recommender System is an AI-powered platform that uses Large Language Models (LLMs) to analyze a user’s resume, " \
-"                  identify skill gaps, generate a personalized career roadmap, and retrieve relevant job opportunities through intelligent keyword matching."
+# from src.preprocessing
+from .preprocessing.preprocessor import Preprocessor
+
+# from vector_db
+from .vector_db.langchain_vector_db_manager import LangchainVectorDBManager
+
+
+# from src.agent
+from .agents.tools.tools import (retriever_tool,  
+                                 generate_resume_summary_tool, 
+                                 generate_missing_skills_tool, 
+                                 rode_map_prompt, 
+                                 extract_job_keywords_tool,
+                                 bind_llm, tool_dict)
+
+
+
+
+

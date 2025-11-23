@@ -1,18 +1,12 @@
 import os
-import sys
 import json
 
 from dotenv import load_dotenv
 from typing import List, Dict, Optional
 
-
-from job_recommender.src.core.exceptions_config import ProjectException
-from job_recommender.src.core.logger_config import logging as log
-
-
+from src import ProjectException, log
 
 load_dotenv()
-
 
 # todo - add `opentelemetry`
 class ApiKeyConfig:
@@ -28,28 +22,27 @@ class ApiKeyConfig:
         keys = config.load() # returns dict of loaded keys 
     """
 
-    REQUIRED_KEYS: List[str] = ["GROQ_API_KEY", "MISTRAL_API_KEY", "PINECONE_API_KEY"]
+    REQUIRED_KEYS: List[str] = ["MISTRAL_API_KEY", "PINECONE_API_KEY"]
 
     def __init__(self, env_provider=os.getenv):
         """
         Args:
             env_provider (callable) : DI fro env varibale access (mock for tests).
         """
-
         self._env = env_provider
         
         # hoalds API keys after being loaded from env or json
         self._api_keys: Dict[str, Optional[str]] = {}
 
 
-
     def load(self) -> Dict[str, str]:
         """
         Load API keys using.
-        return:
+
+        Return:
             dict: a mapping of required API keys
         
-        raise:
+        Raise:
             ProjectException: if any required key is missing or invalid
         """
 
@@ -75,9 +68,8 @@ class ApiKeyConfig:
             
             log.info("Loaded API keys from JSON enviroment variable.")
             self._api_keys.update(parsed)
-        
         except Exception as e:
-            ProjectException(e, context={"operation": "parse json env 'apikeys"})
+            ProjectException(e, context={"operation": "parse json env 'apikeys"}, reraise=True)
 
     def _load_indicidual_keys(self):
         """ Load missing keys from individual environment keys"""
@@ -98,7 +90,8 @@ class ApiKeyConfig:
                 context={
                     "operation": "validate required api keys", 
                     "value": missing
-                }
+                },
+                reraise=True
             )
         log.info(f"All the API keys are successfully validated.")
 

@@ -7,14 +7,7 @@ from tenacity import retry, stop_after_attempt, wait_exponential
 from langchain_mistralai import ChatMistralAI, MistralAIEmbeddings
 from langchain_groq import ChatGroq
 
-
-from job_recommender.src.core.settings import Settings
-
-from job_recommender.src.core.api_key_config import ApiKeyConfig
-from job_recommender.src.core.project_config import ProjectConfig
-
-from job_recommender.src.core.logger_config import logger as log 
-from job_recommender.src.core.exceptions_config import ProjectException
+from src import Settings, api_key_config, project_config, log, log_api_call, ProjectException # todo - add log api calls to model and embedding loaders
 
 class ModelSchema(BaseModel):
     llm: str
@@ -30,10 +23,10 @@ class ModelConfig:
         else:
             log.info("RUNNING IN - PRODUCTION - MODE!!!: Using injected env vars.")
 
-        self._api_key_config = ApiKeyConfig(env_provider=env)
+        self._api_key_config = api_key_config
 
         try:
-            raw_config = ProjectConfig(env_provider=env)
+            raw_config = project_config
             self._project_config = Settings(**raw_config.config).model_dump()
             print(self._project_config)
             log.info("YAML CONFIG LOADED AND VALIDATED.")
@@ -109,7 +102,6 @@ class ModelConfig:
                     "operation": "load embedding model"
                 }
             )
-
 
 model_config = ModelConfig()
 

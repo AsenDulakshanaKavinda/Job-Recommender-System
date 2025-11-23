@@ -18,5 +18,11 @@ pr = Preprocessor(content=content)
 cl = pr.preprocess()
 print(cl)
  """
-from job_recommender.src.core.api_key_config import api_key_config
-print(api_key_config.load()["PINECONE_API_KEY"])
+""" from job_recommender.src.core.api_key_config import api_key_config
+print(api_key_config.load()["PINECONE_API_KEY"]) """
+
+from job_recommender.src.agents.graph.automation import automate
+
+automate()
+
+

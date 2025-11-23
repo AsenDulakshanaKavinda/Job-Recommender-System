@@ -11,6 +11,10 @@ class AgentState(TypedDict):
     messages: Annotated[Sequence[BaseMessage], add_messages]
 
 
+def should_continue(state: AgentState):
+    last_message = state['messages'][-1]
+    return hasattr(last_message, "tool_calls") and len(last_message.tool_calls) > 0
+
 def call_llm(state: AgentState) -> AgentState:
     """" call the llm """
     messages = list['messages']

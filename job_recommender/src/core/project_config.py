@@ -4,8 +4,20 @@ from pathlib import Path
 import os
 import yaml
 import logging
+from datetime import datetime
+import uuid
 from job_recommender.src.core.settings import Settings
 
+def generate_session_id() -> str:
+    """"
+    generate a unique session ID based on the current timestamp
+    and random 8-character uuid format
+    eg:-
+        session_20250115_153045_a1b2c3d4
+    """
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    unique_id = uuid.uuid4().hex[:8]
+    return f"session_{timestamp}_{unique_id}"
 
 class ProjectConfig:
     def __init__(self, env_provider: str | None = None, config_path: str | None = None):
@@ -77,4 +89,5 @@ class ProjectConfig:
         level = getattr(logging, log_cfg.level)
         # logging.basicConfig(filename=log_cfg.filepath, level=level, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s") - if use a file
 
-
+project_config = ProjectConfig()
+session_id = generate_session_id()

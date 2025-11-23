@@ -4,16 +4,13 @@ from pydantic import BaseModel, Field
 from langchain_core.tools import tool
 
 from job_recommender.src.agents.prompts.tool_prompts import resume_summary_prompt, missing_skills_prompt, rode_map_prompt, extract_keyword_prompt
-from job_recommender.src.core.model_config import ModelConfig
-from job_recommender.src.vector_db.langchain_vector_db_manager import LangchainVectorDBManager
-from job_recommender.src.core.logger_config import logger as log 
-from job_recommender.src.core.exceptions_config import ProjectException
+from src import model_config, log, ProjectException, LangchainVectorDBManager
 
 
 vs_manager = LangchainVectorDBManager() # * session id wiil or will not need
 retriever = vs_manager.as_retriever({"k": 10})
 
-models = ModelConfig()
+models = model_config
 model = models.llm_model_loader()
 
 @tool
@@ -34,60 +31,119 @@ def retriever_tool(query: str) -> str:
             return "\n".join(results)
     except Exception as e:
         log.error("Error while initiating `retriever_tool`")  
-        raise ProjectException(
+        ProjectException(
             e,
             context = {
-                "operation": "retriever_tool"
-            }
+                "operation": "retriever_tool",
+                "value": ""
+            },
+            reraise=True
         )
 
 
 @tool
 def generate_resume_summary_tool(query: str) -> str:
     """ Generates ATS-optimized resume summaries. """
+
     docs = retriever_tool.invoke(query)
+
     if not docs:
         return "No relavent information found for summerization."
-    resume_content = "\n\n".join([doc.page_content for doc in docs])
-    chain = resume_summary_prompt | model
-    resume_summery = chain.invoke({"resume_content": resume_content}).content
-    return resume_summery
+    
+    try:
+        resume_content = "\n\n".join([doc.page_content for doc in docs])
+        chain = resume_summary_prompt | model
+        resume_summery = chain.invoke({"resume_content": resume_content}).content
+        return resume_summery
+    except Exception as e:
+        log.error("Error while initiating `generate_resume_summary_tool`")  
+        ProjectException(
+            e,
+            context = {
+                "operation": "retriever_tool",
+                "value": ""
+            },
+            reraise=True
+        )
 
 
 
 @tool
 def generate_missing_skills_tool(query: str):
     """ Analyzes resumes for skill gaps, weak areas, missing tools/technologies. """
+
     docs = retriever_tool.invoke(query)
+
     if not docs:
         return "No relavent information found for skill gaps."
-    resume_content = "\n\n".join([doc.page_content for doc in docs])
-    chain = missing_skills_prompt | model
-    skill_gaph = chain.invoke({"resume_content": resume_content}).content
-    return skill_gaph
+    try:
+        resume_content = "\n\n".join([doc.page_content for doc in docs])
+        chain = missing_skills_prompt | model
+        skill_gaph = chain.invoke({"resume_content": resume_content}).content
+        return skill_gaph
+    except Exception as e:
+        log.error("Error while initiating `generate_missing_skills_tool`")  
+        ProjectException(
+            e,
+            context = {
+                "operation": "generate_missing_skills_tool",
+                "value": ""
+            },
+            reraise=True
+        )
+
 
 @tool
 def generate_road_map_tool(query: str):
     """ create a professional growth roadmap and future-skill plan based on the candidate’s background."""
+
     docs = retriever_tool.invoke(query)
+
     if not docs:
         return "No relavent information found to build rode-map."
-    resume_content = "\n\n".join([doc.page_content for doc in docs])
-    chain = rode_map_prompt | model
-    rode_map = chain.invoke({"resume_content": resume_content}).content
-    return rode_map
+    
+    try:
+        resume_content = "\n\n".join([doc.page_content for doc in docs])
+        chain = rode_map_prompt | model
+        rode_map = chain.invoke({"resume_content": resume_content}).content
+        return rode_map
+    except Exception as e:
+        log.error("Error while initiating `generate_road_map_tool`")  
+        ProjectException(
+            e,
+            context = {
+                "operation": "generate_road_map_tool",
+                "value": ""
+            },
+            reraise=True
+        )
 
 
 @tool
 def extract_job_keywords_tool(query: str):
     """ extract job-related keywords from the content provided """
+
     docs = retriever_tool.invoke(query)
+
     if not docs:
         return "No relavent information found to extract job keywords."
-    resume_content = "\n\n".join([doc.page_content for doc in docs])
-    chain = extract_keyword_prompt | model
-    job_keywords = chain.invoke({"resume_content": resume_content}).content
-    return job_keywords
+    try:
+        resume_content = "\n\n".join([doc.page_content for doc in docs])
+        chain = extract_keyword_prompt | model
+        job_keywords = chain.invoke({"resume_content": resume_content}).content
+        return job_keywords
+    except Exception as e:
+        log.error("Error while initiating `extract_job_keywords_tool`")  
+        ProjectException(
+            e,
+            context = {
+                "operation": "extract_job_keywords_tool",
+                "value": ""
+            },
+            reraise=True
+        )
+
+    
 
 
 tools = [retriever_tool ,generate_resume_summary_tool, generate_missing_skills_tool, 
@@ -95,7 +151,7 @@ tools = [retriever_tool ,generate_resume_summary_tool, generate_missing_skills_t
 
 tool_dict = {t.name: t for t in tools}
 
-llm = model.bind_tools(tools)
+bind_llm = model.bind_tools(tools)
 
 
 

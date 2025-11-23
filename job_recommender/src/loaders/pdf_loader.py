@@ -1,12 +1,8 @@
-import os
-import sys
+
 from typing import BinaryIO, List
 import fitz
 
-
-
-from job_recommender.src.core.logger_config import logger as log 
-from job_recommender.src.core.exceptions_config import ProjectException
+from src import log, ProjectException
 
 class PdfLoader:
     def __init__(self, uploaded_file: BinaryIO):
@@ -49,7 +45,8 @@ class PdfLoader:
                             context = {
                                 "opetation": "text extractor page reader",
                                 "page number": page_num
-                            }
+                            },
+                            reraise=True
                         )
                 
                 full_text = "\n".join(page_texts) # join once
@@ -63,7 +60,8 @@ class PdfLoader:
                 context={
                     "operation": "text extractor",
                     "message": "Invalid PDF file"
-                }
+                },
+                reraise=True
             )
                     
         except Exception as e:
@@ -73,23 +71,23 @@ class PdfLoader:
                 context = {
                     "operation": "text extractor",
                     "message": "Failed to extract text from PDF"
-                }
+                },
+                reraise=True
+
             )
 
-
-    
 
     def _ensure_readability(self) -> bool:
         """ 
         Check the readabiity of the uploaded file, it should be a file-like object.
 
-        args:
+        Args:
             uploaded file: BinaryIO - path of the uploaded file
 
-        return:
-            True - only if readable
+        Return:
+            True: bool - only if readable
 
-        raise:
+        Raise:
             ProjectException: if file not readable
         """
 
@@ -100,7 +98,9 @@ class PdfLoader:
                 "Uploaded file must be a readable file-like object.",
                 context={
                     "operation": "ensure readability of doc",
-                }
+                    "message": "can't read file."
+                },
+                reraise=False
             )
             return False
         else:
@@ -111,13 +111,13 @@ class PdfLoader:
         """ 
         Check the size of the uploaded file,
 
-        args:
+        Args:
             uploaded file: BinaryIO - path of the uploaded file
 
-        return:
-            True - only if it file size < 10MB
+        Return:
+            True: bool - only if it file size < 10MB
 
-        raise:
+        Raise:
             ProjectException: file size > 10MB
         """
 
@@ -140,11 +140,14 @@ class PdfLoader:
                 log.info(f"File size: {file_size / (1024 * 1024):.2f}MB, under the limit.")
                 return True
         except Exception as e:
+            log.error(f"File too large to process.")
             ProjectException(
                 e,
                 context = {
-                    "operation": "check file size"
-                }
+                    "operation": "_ensure_size",
+                    "message": "File too large to process."
+                },
+                reraise=True
             )
 
 

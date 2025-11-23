@@ -6,8 +6,7 @@ from typing import List
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from job_recommender.src.core.logger_config import logger as log 
-from job_recommender.src.core.exceptions_config import ProjectException
+from src import ProjectException, log
 
 class Preprocessor:
     def __init__(self, content: str):
@@ -15,10 +14,10 @@ class Preprocessor:
 
     def preprocess(self) -> List[str]:
         """
-        clean and split the content
+        Clean and split the content.
 
-        return:
-            list of clean and splitted content: List[str]
+        Return:
+            list of clean and splitted content(chunks): List[str]
         """
         try:
             cleaned_content = self._clean_resume_text(self.content)
@@ -31,19 +30,21 @@ class Preprocessor:
                 context = {
                     "operation": "text preprocessing.",
                     "message": "Unexpected error while preprocessing text."
-                }
+                },
+                reraise=True
             )
 
 
     def _splliter(self, cleaned_content: str, chunk_size: int = 300, chunk_overlap: int = 50) -> List[str]:
         """ 
         Split the cleaned text to chunks. 
-        args:
+
+        Args:
             cleaned_text : str
             chunk_size : int
             chunk_overlap : int
         
-        return:
+        Return:
             list of chunks (List[str])
 
         """
@@ -61,19 +62,20 @@ class Preprocessor:
                 context = {
                     "operation": "text splitter(chunking).",
                     "message": "Unexpected error while splitting the cleaned text."
-                }
+                },
+                reraise=True
             )
 
 
     def _clean_resume_text(self, content : str) -> str:
         """
-        clean resume text for embedding by removing unwanted characters, PII, bullets, symbols,
+        Clean resume text for embedding by removing unwanted characters, PII, bullets, symbols,
         URLs, emails, phone numbers, extra whitespace, and converting to lowercase.
         
-        args:
+        Args:
             content: str
         
-        return:
+        Return:
             cleand text: str
         """
         
@@ -120,6 +122,7 @@ class Preprocessor:
                 context = {
                     "operation": "text cleaning.",
                     "message": "Unexpected error while cleaning text."
-                }
+                },
+                reraise=True
             )
 
