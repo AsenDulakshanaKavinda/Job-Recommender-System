@@ -38,3 +38,17 @@ def retriever_tool(query: str) -> str:
         )
 
 
+@tool
+def 
+
+
+
+
+
+
+
+
+
+
+
+
