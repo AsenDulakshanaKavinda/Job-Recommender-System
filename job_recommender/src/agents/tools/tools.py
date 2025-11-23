@@ -9,8 +9,6 @@ from job_recommender.src.vector_db.langchain_vector_db_manager import LangchainV
 from job_recommender.src.core.logger_config import logger as log 
 from job_recommender.src.core.exceptions_config import ProjectException
 
-class RetrieverInput(BaseModel):
-    query: str = Field(description="the system prompt")
 
 vs_manager = LangchainVectorDBManager() # * session id wiil or will not need
 retriever = vs_manager.as_retriever({"k": 10})
