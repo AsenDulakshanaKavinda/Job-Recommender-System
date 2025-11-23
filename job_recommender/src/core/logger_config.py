@@ -7,20 +7,30 @@ import sys
 import inspect
 from functools import wraps
 from typing import Any
+from logging.handlers import RotatingFileHandler
 
 def get_logger(name: str = "job_recommender_system") -> logging.Logger:
     """ Get a logger instance. """
     logger = logging.getLogger(name)
 
     if not logger.handlers:
-        # set up basic logging
-        handler = logging.StreamHandler(sys.stdout)
+        # set up console handler
+        console_handler = logging.StreamHandler(sys.stdout)
         formatter = logging.Formatter(
             '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
         )
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
-        logger.setLevel(logging.INFO)
+        console_handler.setFormatter(formatter)
+        logger.addHandler(console_handler)
+
+        # file handler with rotation (max 5MB, keep 5 backups)
+        file_handler = RotatingFileHandler('app.log', maxBytes=5*1024*1024, backupCount=5)
+        file_formatter = logging.Formatter(
+            '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        )
+        file_handler.setFormatter(file_handler)
+        logger.addHandler(file_handler)
+
+        logger.setLevel(logging.DEBUG)
 
     return logger
 
