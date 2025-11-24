@@ -6,7 +6,7 @@ from pinecone import Pinecone, ServerlessSpec
 from langchain_pinecone import PineconeVectorStore
 
 from src.job_recommender.core.api_key_config import api_key_config
-from src.job_recommender.core.model_config import model_config
+from src.job_recommender.core.model_config import ModelConfig
 
 from src.job_recommender.core.exceptions_config import ProjectException
 from src.job_recommender.core.logger_config import logger as log
@@ -31,6 +31,8 @@ class LangchainVectorDBManager:
             self.pc = Pinecone(api_key=self._load_pinecone_api_key())
             log.info(f"Pinecone client initialized.")
 
+            model_config = ModelConfig()
+
             # load the embedding model
             embeddings = model_config.embedding_model_loader()
 
@@ -38,7 +40,7 @@ class LangchainVectorDBManager:
             if not self.pc.has_index(self.index_name):
                 self.pc.create_index(
                     name = self.index_name,
-                    dimension = 1536,
+                    dimension = 1024,
                     metric = "cosine",
                     spec = ServerlessSpec(cloud="aws", region="us-east-1"),
                 )

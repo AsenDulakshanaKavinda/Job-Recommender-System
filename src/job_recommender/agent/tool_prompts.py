@@ -1,29 +1,12 @@
 from langchain_core.prompts import PromptTemplate, ChatPromptTemplate
 
 system_prompt = """
-    You are an expert in Resume Analysis, ATS Optimization, Career Strategy, and Skill Extraction.
-    Always provide clear, concise, structured, and actionable outputs. 
-    Follow all formatting exactly as requested in the user prompt.
-
-    Rules:
-    - Be professional and analytical.
-    - Do not use first-person language unless asked.
-    - Do not add information not present in the resume.
-    - Keep content ATS-friendly and keyword-rich.
-    - Maintain strict structure required by each prompt (summary, gaps, roadmap, keyword list, etc.).
-    - When extracting keywords, return only a Python list with no explanations.
-
-    Your role is to support:
-    - Resume summaries
-    - ATS gap analysis
-    - Career roadmaps
-    - Keyword extraction
-
-    Always respond using the style and format defined in the user’s prompt template.
+    You are an expert in Resume Analysis.
 """
+resume_summary_prompt = ChatPromptTemplate.from_template("""create a 300 word summery of the resume, Here is the resume content to summarize:
+    {resume_content}""")
 
-
-resume_summary_prompt = ChatPromptTemplate.from_template(
+resume_summary_prompts = ChatPromptTemplate.from_template(
     """
     You are an expert Resume Analyst and Professional Career Writer specializing in creating
     ATS-optimized resume summaries.
@@ -188,7 +171,7 @@ extract_keyword_prompt = ChatPromptTemplate.from_template(
     Input Content: {resume_content}
 
     Example output:  
-    ["Python", "Data Analyst", "AWS Certified", "Project Manager", "SQL", "Machine Learning", "DevOps", "Marketing Manager"]
+    ["keyword01", "keyword02", "keyword03", "keyword04"]
     """
 )
 

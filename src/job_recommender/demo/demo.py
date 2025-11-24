@@ -29,7 +29,7 @@ def test_model_loader():
     print("Embed Loaded")
     
 
-# 3. test vs
+# 4. test vs
 from src.job_recommender.vector_db.langchain_vector_db_manager import LangchainVectorDBManager
 
 def test_vs():
@@ -39,4 +39,16 @@ def test_vs():
     print("upsert done")
     manager.delete()
     print("namespace deleted")
+
+# 5. data upsert pipeline
+from src.job_recommender.pipeline.data_upsert_pipeline import DataUpsert
+def test_upsert_pipeline():
+    filepath = "C:/Users/asend/Downloads/resume_sample_student.pdf"
+    du = DataUpsert(filepath, "test_id")
+    du.upsert_pipeline()
+
+
+
+
+
 

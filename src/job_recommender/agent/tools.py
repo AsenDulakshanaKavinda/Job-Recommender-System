@@ -1,17 +1,19 @@
 
 from pydantic import BaseModel, Field
+from typing import Optional, Tuple
 
 from langchain_core.tools import tool
 
-from src.job_recommender.agents.prompts.tool_prompts import resume_summary_prompt, missing_skills_prompt, rode_map_prompt, extract_keyword_prompt
-from src import model_config, log, ProjectException, LangchainVectorDBManager
+from src.job_recommender.agent.tool_prompts import resume_summary_prompt, missing_skills_prompt, rode_map_prompt, extract_keyword_prompt
 
+from src.job_recommender.vector_db.langchain_vector_db_manager import LangchainVectorDBManager
+from src.job_recommender.core.model_config import ModelConfig
+from src.job_recommender.core.exceptions_config import ProjectException
+from src.job_recommender.core.logger_config import logger as log
 
-vs_manager = LangchainVectorDBManager() # * session id wiil or will not need
-retriever = vs_manager.as_retriever({"k": 10})
-
-models = model_config
-model = models.llm_model_loader()
+# module-level placeholders used by the tool functions define below
+retriever = None
+model = None
 
 @tool
 def retriever_tool(query: str) -> str:
@@ -65,7 +67,6 @@ def generate_resume_summary_tool(query: str) -> str:
             },
             reraise=True
         )
-
 
 
 @tool
@@ -143,15 +144,39 @@ def extract_job_keywords_tool(query: str):
             reraise=True
         )
 
-    
+def build_tools(session_id: Optional[str] = None) -> Tuple[list, dict, object]:
+    """
+    Initialize a LangchainVectorDBManager with session_id, create retriever,
+    Load LLM and bind tools.
 
+    Args
+        session_id: str
 
-tools = [retriever_tool ,generate_resume_summary_tool, generate_missing_skills_tool, 
+    Return
+        tools, tool_dict, bound_llm: Tuple[list, dict, object]
+    """
+
+    global retriever, model
+
+    # initializine vectorstore managet for this session
+    vs_manager = LangchainVectorDBManager(session_id=session_id)
+    retriever = vs_manager.as_retriever()
+
+    # load models
+    model_config = ModelConfig()
+    model = model_config.llm_model_loader()
+
+    # tools
+    tools = [retriever_tool ,generate_resume_summary_tool, generate_missing_skills_tool, 
          generate_road_map_tool, extract_job_keywords_tool]
+    
+    tool_dict = {t.name: t for t in tools}
 
-tool_dict = {t.name: t for t in tools}
+    # bined the tools to the LLM for use in agent loops
+    bound_llm = model.bind_tools(tools)
 
-bind_llm = model.bind_tools(tools)
+    
+    return tools, tool_dict, bound_llm
 
 
 

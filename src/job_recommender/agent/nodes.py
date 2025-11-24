@@ -3,8 +3,8 @@ from typing import TypedDict, Annotated, Sequence
 from operator import add as add_messages
 from langchain_core.messages import BaseMessage, SystemMessage, ToolMessage
 
-from src.job_recommender.agents.prompts.tool_prompts import system_prompt
-from src.job_recommender.agents.tools.tools import llm, tool_dict
+from src.job_recommender.agent.tool_prompts import system_prompt
+from src.job_recommender.agent.tools import llm, tool_dict
 
 
 class AgentState(TypedDict):
