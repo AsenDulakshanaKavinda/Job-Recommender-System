@@ -6,7 +6,9 @@ from typing import List
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from src import ProjectException, log
+
+from src.job_recommender.core.exceptions_config import ProjectException
+from src.job_recommender.core.logger_config import logger as log, log_api_call
 
 class Preprocessor:
     def __init__(self, content: str):

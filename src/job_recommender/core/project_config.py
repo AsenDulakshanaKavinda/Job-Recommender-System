@@ -6,7 +6,6 @@ import yaml
 import logging
 from datetime import datetime
 import uuid
-from job_recommender.src.core.settings import Settings
 
 def generate_session_id() -> str:
     """"

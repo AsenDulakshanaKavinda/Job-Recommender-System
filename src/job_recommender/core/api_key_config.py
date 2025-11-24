@@ -4,7 +4,8 @@ import json
 from dotenv import load_dotenv
 from typing import List, Dict, Optional
 
-from src import ProjectException, log
+from src.job_recommender.core.exceptions_config import ProjectException
+from src.job_recommender.core.logger_config import logger as log
 
 load_dotenv()
 

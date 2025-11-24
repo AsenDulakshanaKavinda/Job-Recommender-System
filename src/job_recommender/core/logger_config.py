@@ -27,7 +27,7 @@ def get_logger(name: str = "job_recommender_system") -> logging.Logger:
         file_formatter = logging.Formatter(
             '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
         )
-        file_handler.setFormatter(file_handler)
+        file_handler.setFormatter(file_formatter)
         logger.addHandler(file_handler)
 
         logger.setLevel(logging.DEBUG)
@@ -79,7 +79,7 @@ class LogContext:
     
     def __exit__(self, exc_type, exc_val, exc_tb):
         if exc_type is None:
-            self.logger.debug(f"Complited {self.operation}")
+            self.logger.debug(f"Completed {self.operation}")
         else:
             self.logger.error(f"Faild {self.operation}: {exc_val}", exc_info=True)
 

@@ -5,8 +5,11 @@ from typing import Optional, List
 from pinecone import Pinecone, ServerlessSpec
 from langchain_pinecone import PineconeVectorStore
 
-from src import api_key_config, model_config, log, ProjectException, session_id
+from src.job_recommender.core.api_key_config import api_key_config
+from src.job_recommender.core.model_config import model_config
 
+from src.job_recommender.core.exceptions_config import ProjectException
+from src.job_recommender.core.logger_config import logger as log
 
 
 
@@ -163,8 +166,5 @@ class LangchainVectorDBManager:
                     "value": "Unexpected error while loading key"
                 }
             )
-
-
-vs
 
 

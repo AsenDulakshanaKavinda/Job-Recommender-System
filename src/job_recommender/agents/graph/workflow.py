@@ -1,7 +1,7 @@
 
 from langgraph.graph import StateGraph, START, END
 
-from job_recommender.src.agents.nodes.nodes import AgentState, call_llm, take_action, should_continue
+from src.job_recommender.agents.nodes.nodes import AgentState, call_llm, take_action, should_continue
 
 graph = StateGraph(AgentState)
 graph.add_node("llm", call_llm)

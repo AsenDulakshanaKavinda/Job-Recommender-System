@@ -1,4 +1,4 @@
-from job_recommender.src.core.model_config import ModelLoader
+from src.job_recommender.core.model_config import ModelLoader
 
 def test():
     t = ModelLoader()

@@ -3,15 +3,16 @@ from typing import TypedDict, Annotated, Sequence
 from operator import add as add_messages
 from langchain_core.messages import BaseMessage, SystemMessage, ToolMessage
 
-from job_recommender.src.agents.prompts.tool_prompts import system_prompt
-from job_recommender.src.agents.tools.tools import llm, tool_dict
+from src.job_recommender.agents.prompts.tool_prompts import system_prompt
+from src.job_recommender.agents.tools.tools import llm, tool_dict
 
 
 class AgentState(TypedDict):
     messages: Annotated[Sequence[BaseMessage], add_messages]
 
 
-def should_continue(state: AgentState):
+def should_continue(state: AgentState) -> bool:
+    """" decide should continue with another tool or exit """
     last_message = state['messages'][-1]
     return hasattr(last_message, "tool_calls") and len(last_message.tool_calls) > 0
 

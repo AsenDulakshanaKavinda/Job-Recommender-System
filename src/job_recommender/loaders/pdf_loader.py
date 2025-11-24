@@ -2,7 +2,8 @@
 from typing import BinaryIO, List
 import fitz
 
-from src import log, ProjectException
+from src.job_recommender.core.exceptions_config import ProjectException
+from src.job_recommender.core.logger_config import logger as log, log_api_call
 
 class PdfLoader:
     def __init__(self, uploaded_file: BinaryIO):
@@ -75,7 +76,6 @@ class PdfLoader:
                 reraise=True
 
             )
-
 
     def _ensure_readability(self) -> bool:
         """ 

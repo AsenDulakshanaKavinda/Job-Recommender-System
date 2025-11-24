@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 
 from langchain_core.tools import tool
 
-from job_recommender.src.agents.prompts.tool_prompts import resume_summary_prompt, missing_skills_prompt, rode_map_prompt, extract_keyword_prompt
+from src.job_recommender.agents.prompts.tool_prompts import resume_summary_prompt, missing_skills_prompt, rode_map_prompt, extract_keyword_prompt
 from src import model_config, log, ProjectException, LangchainVectorDBManager
 
 

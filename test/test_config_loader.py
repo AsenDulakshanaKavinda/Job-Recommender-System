@@ -1,4 +1,4 @@
-from job_recommender.src.core.project_config import ProjectConfig
+from src.job_recommender.core.project_config import ProjectConfig
 
 def test_load():
     print("=== TEST: LoadConfig ===")

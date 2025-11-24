@@ -1,5 +1,5 @@
 from langchain_core.messages import HumanMessage
-from job_recommender.src.agents.graph.workflow import rag_agent
+from src.job_recommender.agents.graph.workflow import rag_agent
 
 def automate():
     summery_query = "generate a summey of the entire resume PDF"

@@ -6,11 +6,11 @@ from typing import Optional, List
 
 from pinecone import Pinecone
 
-from job_recommender.src.core.api_key_config import api_key_config
-from job_recommender.src.core.model_config import model_config
+from src.job_recommender.core.api_key_config import api_key_config
+from src.job_recommender.core.model_config import model_config
 
-from job_recommender.src.core.logger_config import logger as log 
-from job_recommender.src.core.exceptions_config import ProjectException
+from src.job_recommender.core.logger_config import logger as log 
+from src.job_recommender.core.exceptions_config import ProjectException
 
 def generate_session_id() -> str:
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')

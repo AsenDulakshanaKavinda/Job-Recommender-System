@@ -5,10 +5,7 @@
 import sys
 import traceback
 from typing import Optional, Dict, Any
-from job_recommender.src.core.logger_config import get_logger
-
-
-logger = get_logger()
+from .logger_config import logger
 
 def format_error_message(error: Exception, tb) -> str:
     """

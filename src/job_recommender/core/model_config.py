@@ -7,7 +7,13 @@ from tenacity import retry, stop_after_attempt, wait_exponential
 from langchain_mistralai import ChatMistralAI, MistralAIEmbeddings
 from langchain_groq import ChatGroq
 
-from src import Settings, api_key_config, project_config, log, log_api_call, ProjectException # todo - add log api calls to model and embedding loaders
+# todo - add log api calls to model and embedding loaders
+from src.job_recommender.core.api_key_config import api_key_config
+from src.job_recommender.core.project_config import project_config
+from src.job_recommender.core.settings import Settings
+
+from src.job_recommender.core.exceptions_config import ProjectException
+from src.job_recommender.core.logger_config import logger as log, log_api_call
 
 class ModelSchema(BaseModel):
     llm: str
@@ -103,7 +109,7 @@ class ModelConfig:
                 }
             )
 
-model_config = ModelConfig()
+# model_config = ModelConfig()
 
 # This decorator applies retry logic to the function it wraps.
 # It uses the 'tenacity' library to handle transient failures automatically.
