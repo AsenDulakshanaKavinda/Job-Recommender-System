@@ -96,8 +96,6 @@ class ApiKeyConfig:
             )
         log.info(f"All the API keys are successfully validated.")
 
-
-
 api_key_config = ApiKeyConfig()
 
 
