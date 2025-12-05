@@ -41,13 +41,13 @@ class ProjectException(Exception):
             error: Exception,
             *,
             context: Optional[Dict[str, Any]] = None,
-            reraise: bool = True
+            reraise: bool = False
     ):
         """
         Args:
             error: The Original exception.
             context: Optional extra information (user_id, job_id, api)
-            reraise: If True, re-raise after logging (default: True)
+            reraise: If True, re-raise after logging (default: False)
         """
 
         exc_type, exc_val, exc_tb = sys.exc_info()

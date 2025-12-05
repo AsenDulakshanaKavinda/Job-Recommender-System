@@ -18,12 +18,15 @@ class ApiKeyConfig:
         1. JSON playload stored in env variables `apikeys`.
         2. Individual environment variables defined in `REQUIRED_KEYS`.
 
+    Args:
+        env_provider - dev or production env
+
     Usage:
         config = ApiKeyConfig()
         keys = config.load() # returns dict of loaded keys 
     """
 
-    REQUIRED_KEYS: List[str] = ["MISTRAL_API_KEY", "PINECONE_API_KEY"]
+    REQUIRED_KEYS: List[str] = ["MISTRAL_API_KEY", "APIFY_API_KEY", "APIFY_ACTOR_ID"]
 
     def __init__(self, env_provider=os.getenv):
         """

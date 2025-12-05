@@ -6,6 +6,17 @@ from src.job_recommender.core.exceptions_config import ProjectException
 from src.job_recommender.core.logger_config import logger as log, log_api_call
 
 class PdfLoader:
+    """
+    Utility class that loads and validates PDF documents needed across the application.
+
+    Args:
+        uploaded_file:  BinaryIO
+
+    Usage:
+        config = PdfLoader(uploaded_file)
+        content = config.text_extractor() - returns str
+    """
+
     def __init__(self, uploaded_file: BinaryIO):
         self.uploaded_file = uploaded_file
         self._ensure_size()

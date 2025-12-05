@@ -15,11 +15,19 @@ from src.job_recommender.core.settings import Settings
 from src.job_recommender.core.exceptions_config import ProjectException
 from src.job_recommender.core.logger_config import logger as log, log_api_call
 
-class ModelSchema(BaseModel):
-    llm: str
-    embedding_model: str
 
 class ModelConfig:
+    """
+    Utility class that loads and validates LLMs and Embeddings models across the application.
+
+    Args:
+        env_provider - dev or production env
+
+    Usage:
+        config = ModelConfig()
+        llm = config.llm_model_loader() # returns llm
+        embedding = config.embedding_model_loader() # returns embedding model 
+    """
     def __init__(self):
         env = os.getenv("ENV", "dev").lower()
 
@@ -49,8 +57,8 @@ class ModelConfig:
     def llm_model_loader(self):
         """ 
         Load the LLM Model according to the configuration in config and env.
-            args: None
-            return : llm
+
+            Return : llm
         """
         llm_block = self._project_config.get("llm", {})
         provider_key = os.getenv("LLM_PROVIDER", "mistral")
@@ -82,8 +90,8 @@ class ModelConfig:
     def embedding_model_loader(self):
         """ 
         Load the embedding Model according to the configuration in config and env.
-            args: None
-            return : embedding model
+
+            Return : embedding model
         """
         enbedding_block = self._project_config.get("embedding_model", {})
         provider_key = os.getenv("EMBEDDING_PROVIDER", "mistral")
@@ -109,7 +117,7 @@ class ModelConfig:
                 }
             )
 
-# model_config = ModelConfig()
+model_config = ModelConfig()
 
 # This decorator applies retry logic to the function it wraps.
 # It uses the 'tenacity' library to handle transient failures automatically.

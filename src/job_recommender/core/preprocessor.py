@@ -11,10 +11,20 @@ from src.job_recommender.core.exceptions_config import ProjectException
 from src.job_recommender.core.logger_config import logger as log, log_api_call
 
 class Preprocessor:
+    """
+    Utility class that preprocess content data needed across the application.
+
+    Usage:
+        prerocesser = Preprocessor()
+        keys = prerocesser.preprocess() 
+    """
+    
     def __init__(self, content: str):
         self.content = content
 
-    def preprocess(self) -> List[str]:
+
+
+    def preprocess(self) -> str:
         """
         Clean and split the content.
 
@@ -23,9 +33,9 @@ class Preprocessor:
         """
         try:
             cleaned_content = self._clean_resume_text(self.content)
-            splitted_content = self._splliter(cleaned_content)
+            splitted_content = self._splliter(cleaned_content) # * did't use this
             log.info(f"Content preprocessing completed")
-            return splitted_content
+            return cleaned_content
         except Exception as e:
             ProjectException(
                 e,
