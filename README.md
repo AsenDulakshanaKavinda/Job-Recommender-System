@@ -47,7 +47,7 @@ MISTRAL_API_KEY=<Your Mistral API key>
 APIFY_API_KEY=<Your Apify API key>
 ```
 ## Usage
-7. **Details **:
+7. **Details**:
 * Endpoint: /process_resume
 * Method: POST
 * Description: Upload a resume PDF and get the processed results.
