@@ -10,8 +10,8 @@ from langchain_chroma import Chroma
 
 from rec_system.client import load_embedding_model
 from rec_system.vectorstore import create_vector_store
-from rec_system.schemas import GraphState
-from rec_system.utils import documents_config
+from rec_system.schemas import JobRecState
+from rec_system.utils import documents_config, log, RecommendationSystem
 
 
 def read_document(filepath: Path) -> List[Document]:
@@ -26,10 +26,15 @@ def read_document(filepath: Path) -> List[Document]:
     try:
         loader = PyPDFLoader(file_path=filepath)
         docs = loader.load()
-        print(f"Reading document, {len(docs)} docs.")
+        log.info(f"Reading document, loading: {len(docs)} docs.")
         return docs
     except Exception as e:
-        print(str(e))
+        RecommendationSystem(
+            e,
+            context={
+                "operation": "Reading document"
+            }
+        )
 
 def split_docs(docs: List[Document]) -> List[Document]:
     """ 
@@ -47,13 +52,16 @@ def split_docs(docs: List[Document]) -> List[Document]:
             chunk_size=documents_config['chunk_size'],
             chunk_overlap=documents_config['chunk_overlap']
         )
-
         chunks = splitter.split_documents(docs)
-        print(f"splitted into {len(chunks)} chunks.")
+        log.info(f"splitted into chunk, {len(chunks)} chunks created..")
         return chunks
     except Exception as e:
-        print(str(e))
-
+        RecommendationSystem(
+            e,
+            context={
+                "operation": "Splitting documents"
+            }
+        )
 
 def store_to_vec_db(chunks: List[Document]) -> None:
     """
@@ -67,25 +75,39 @@ def store_to_vec_db(chunks: List[Document]) -> None:
     try:
         vector_store = create_vector_store()
         uuids = [str(uuid4()) for _ in range(len(chunks))]
+        log.info("Storing info in vs")
         vector_store.add_documents(documents=chunks, ids=uuids)
     except Exception as e:
-        print(str(e))
-
+        RecommendationSystem(
+            e,
+            context={
+                "operation": "Store info into vs"
+            }
+        )
+        
 # Node - 1
-def read_store_vec_db(graph_state: GraphState) -> GraphState:
+def read_store_vec_db(job_rec_state: JobRecState) -> JobRecState:
     """ 
     Read and store data in a Vector DB
-
     """
-    filepath = "sample_data/What-is-a-Heart-Attack.pdf"
+
+    job_rec_state["original_filepath"] = "sample_data/What-is-a-Heart-Attack.pdf"
     try:
-        if not docs:
-            raise ValueError("Documents are missing.")
-        docs = read_document(filepath)
+        if not job_rec_state["original_filepath"]:
+            log.error("Filepath is missing.")
+            raise ValueError("Filepath is missing.")
+        
+        docs = read_document(job_rec_state["original_filepath"])
         chunks = split_docs(docs)
         store_to_vec_db(chunks)
+        log.info("Storing info in vs is Completed.")
     except Exception as e:
-        print(str(e))
+        RecommendationSystem(
+            e, 
+            context={
+                "operation": "Reading and storing vs NODE"
+            }
+        )
    
 
    
