@@ -1,7 +1,8 @@
 from typing import TypedDict
-from uuid import uuid1
+from uuid import uuid4
 
-class GraphState:
+class GraphState(TypedDict):
     session_id: str
+
     
 
