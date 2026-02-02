@@ -46,22 +46,25 @@ llm_config = {
 }
 
 embedding_model_config = {
-    'api_key': os.getenv(config['EMBEDDING']['KEY']),
-    'embedding_model': config['EMBEDDING']['MODEL']
+    'api_key': os.getenv(config['EMBEDDING_MODEL']['KEY']),
+    'embedding_model': config['EMBEDDING_MODEL']['MODEL']
 }
 
 documents_config = {
-    'chunk_size': config.getint('SPLIT_DOCS', 'CHUNK_SIZE'),
-    'chunk_overlap': config.getint('SPLIT_DOCS', 'CHUNK_OVERLAP')
+    'chunk_size': config.getint('DOCUMENT_OPS', 'CHUNK_SIZE'),
+    'chunk_overlap': config.getint('DOCUMENT_OPS', 'CHUNK_OVERLAP')
 }
 
 log_config = {
-    'log_name': config['LOG']['LOG_NAME'],
-    'log_dir': config['LOG']['LOG_DIR'],
-    'log_file': config['LOG']['LOG_FILE'],
-    'log_dest': f"{config['LOG']['LOG_DIR']}/{config['LOG']['LOG_FILE']}"
+    'log_name': config['LOGGING']['LOG_NAME'],
+    'log_dir': config['LOGGING']['LOG_DIR'],
+    'log_file': config['LOGGING']['LOG_FILE'],
+    'log_dest': f"{config['LOGGING']['LOG_DIR']}/{config['LOGGING']['LOG_FILE']}"
 }
 
 chromadb_config = {
     'chromadb_api_key': os.getenv(config['CHROMA_DB']['KEY']),
+    'collection_name': config['CHROMA_DB']['COLLECTION_NAME'],
+    'persist_directory': config['CHROMA_DB']['PERSIST_DIRECTORY'],
+    'k': config['CHROMA_DB']['K']
 }
