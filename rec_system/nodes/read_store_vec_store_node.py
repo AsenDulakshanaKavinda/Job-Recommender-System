@@ -9,7 +9,7 @@ from langchain_chroma import Chroma
 
 
 from rec_system.client import load_embedding_model
-from rec_system.vectorstore import create_vector_store
+from rec_system.vectorstore import chromadb
 from rec_system.schemas import JobRecState
 from rec_system.utils import documents_config, log, RecommendationSystemError
 
@@ -73,7 +73,7 @@ def store_to_vec_db(chunks: List[Document]) -> None:
         None
     """
     try:
-        vector_store = create_vector_store()
+        vector_store = chromadb.vector_store
         uuids = [str(uuid4()) for _ in range(len(chunks))]
         log.info("Storing info in vs")
         vector_store.add_documents(documents=chunks, ids=uuids)
@@ -101,6 +101,7 @@ def read_store_vec_db(job_rec_state: JobRecState) -> JobRecState:
         chunks = split_docs(docs)
         store_to_vec_db(chunks)
         log.info("Storing info in vs is Completed.")
+        return job_rec_state
     except Exception as e:
         RecommendationSystemError(
             e, 

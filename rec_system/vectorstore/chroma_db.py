@@ -36,3 +36,4 @@ class VectorStore:
             print(str(e))
 
 
+chromadb = VectorStore()

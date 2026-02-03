@@ -12,6 +12,8 @@ Focus on:
 - Primary technical domains
 - Career direction
 
+extract the matching job roles for the user according to the user cv
+
 Rules:
 - No bullet points longer than one line.
 - Do NOT invent experience.

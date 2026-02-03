@@ -1,5 +1,6 @@
-from .chroma_db import create_vector_store
+from .chroma_db import chromadb
+
 
 __all__ = [
-    "create_vector_store"
+    "chromadb"
 ]
