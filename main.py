@@ -1,6 +1,6 @@
 
 # from rec_system.graph.nodes.read_store_vec_store_node import read_store_vec_db
-from rec_system.utils import log, RecommendationSystem
+from rec_system.utils import log, RecommendationSystemError
 from rec_system.client import load_llm_model
 
 def main():

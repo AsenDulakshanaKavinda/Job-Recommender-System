@@ -1,6 +1,6 @@
 from langchain_core.prompts import ChatPromptTemplate
 from rec_system.schemas import summarizer_parser
-from rec_system.utils import log, RecommendationSystem
+from rec_system.utils import log, RecommendationSystemError
 
 SYSTEM_PROMPT = """
 You are an expert technical recruiter.
@@ -35,7 +35,7 @@ def load_summarizer_prompt():
         ])
         return SUMMARIZER_PROMPT
     except Exception as e:
-        RecommendationSystem(
+        RecommendationSystemError(
             e,
             context={
                 "operation": "Loading summarizer prompt"

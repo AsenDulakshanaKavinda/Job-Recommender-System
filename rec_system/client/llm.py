@@ -1,5 +1,5 @@
 from langchain_mistralai import ChatMistralAI
-from rec_system.utils import llm_config, log, RecommendationSystem
+from rec_system.utils import llm_config, log, RecommendationSystemError
 
 def load_llm_model():
     try:
@@ -10,7 +10,7 @@ def load_llm_model():
         log.info("Loading LLM.")
         return llm
     except Exception as e:
-        RecommendationSystem(
+        RecommendationSystemError(
             e,
             context={
                 "operation": "Loading LLM."

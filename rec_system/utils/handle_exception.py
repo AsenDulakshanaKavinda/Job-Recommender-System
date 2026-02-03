@@ -32,7 +32,7 @@ def format_error_message(error: Exception, tb) -> str:
     return f"Error in [{file_name}] at line [{line_number}]: {str(error)} \nFull Traceback:\n{full_trace}"
 
 
-class RecommendationSystem(Exception):
+class RecommendationSystemError(Exception):
     """
     Custom Exception class providing detailed, logged error information.
     """

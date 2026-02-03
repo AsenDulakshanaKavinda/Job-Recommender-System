@@ -11,7 +11,7 @@ from langchain_chroma import Chroma
 from rec_system.client import load_embedding_model
 from rec_system.vectorstore import create_vector_store
 from rec_system.schemas import JobRecState
-from rec_system.utils import documents_config, log, RecommendationSystem
+from rec_system.utils import documents_config, log, RecommendationSystemError
 
 
 def read_document(filepath: Path) -> List[Document]:
@@ -29,7 +29,7 @@ def read_document(filepath: Path) -> List[Document]:
         log.info(f"Reading document, loading: {len(docs)} docs.")
         return docs
     except Exception as e:
-        RecommendationSystem(
+        RecommendationSystemError(
             e,
             context={
                 "operation": "Reading document"
@@ -56,7 +56,7 @@ def split_docs(docs: List[Document]) -> List[Document]:
         log.info(f"splitted into chunk, {len(chunks)} chunks created..")
         return chunks
     except Exception as e:
-        RecommendationSystem(
+        RecommendationSystemError(
             e,
             context={
                 "operation": "Splitting documents"
@@ -78,7 +78,7 @@ def store_to_vec_db(chunks: List[Document]) -> None:
         log.info("Storing info in vs")
         vector_store.add_documents(documents=chunks, ids=uuids)
     except Exception as e:
-        RecommendationSystem(
+        RecommendationSystemError(
             e,
             context={
                 "operation": "Store info into vs"
@@ -102,7 +102,7 @@ def read_store_vec_db(job_rec_state: JobRecState) -> JobRecState:
         store_to_vec_db(chunks)
         log.info("Storing info in vs is Completed.")
     except Exception as e:
-        RecommendationSystem(
+        RecommendationSystemError(
             e, 
             context={
                 "operation": "Reading and storing vs NODE"

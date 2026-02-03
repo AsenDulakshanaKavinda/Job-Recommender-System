@@ -4,9 +4,9 @@ from pathlib import Path
  
 class JobRecState(TypedDict):
     session_id: str
-    original_filepath: Path
-    raw_cv_content: str
-    cv_summary: str
+    original_filepath: Path # 
+    raw_cv_content: str # 
+    cv_summary: str # 
     extracted_roles: list[str]
     extracted_skills: list[str]
     missing_skills: list[str]

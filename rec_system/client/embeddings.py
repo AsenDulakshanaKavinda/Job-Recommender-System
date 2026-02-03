@@ -2,7 +2,7 @@
 from langchain_mistralai import MistralAIEmbeddings
 
 # from rec_system.utils import llm_config
-from rec_system.utils import llm_config, log, RecommendationSystem
+from rec_system.utils import llm_config, log, RecommendationSystemError
 
 def load_embedding_model():
     try:
@@ -13,7 +13,7 @@ def load_embedding_model():
         log.info("Embedding Loaded.")
         return embedding_model
     except Exception as e:
-        RecommendationSystem(
+        RecommendationSystemError(
             e,
             context={
                 "operation": "Loading embedding model."
