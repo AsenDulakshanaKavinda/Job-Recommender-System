@@ -32,12 +32,11 @@ def summarizer(job_rec_state: JobRecState) -> JobRecState:
     
     try:
         response = chain.invoke({
-            "cv_content": job_rec_state["raw_cv_content"],
+            "raw_cv_content": job_rec_state["raw_cv_content"],
             "format_instructions": summarizer_parser.get_format_instructions()
         })
         log.info("Summarizing completed.")
-        # job_rec_state["cv_summary"] = response #TODO: add only the content
-        # job_rec_state["job_matches"] = response
+        job_rec_state["cv_summary"] = response.cv_summary
         return job_rec_state
     except Exception as e:
         RecommendationSystemError(

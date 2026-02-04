@@ -5,7 +5,7 @@
 from rec_system.workflow.graph import app
 
 def main():
-    app.invoke({"original_filepath": "/mnt/e/Job-Recommender-System/sample_data/What-is-a-Heart-Attack.pdf"})
+    app.invoke({"original_filepath": "/mnt/e/Job-Recommender-System/sample_data/John Carter cv.pdf"})
     
 
 

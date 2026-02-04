@@ -17,19 +17,22 @@ Rules:
 - Do NOT infer skills not clearly present.
 - Normalize skill names
 - Avoid duplicates.
+- Return extracted_skills as a SINGLE flat list of strings.
+- Return missing_skills as a SINGLE flat list of strings.
+- Do not group skills into categories.
+
+{format_instructions}
 
 """
 
 def load_skills_extractor_prompt():
     try:
-        format_instructions = skill_extractor_parser.get_format_instructions()
-        if not format_instructions:
-            log.error("Cannot create format instruction for the skill extractor prompt.")
-            raise ValueError("format instruction error")
         EXTRACT_MISSING_SKILLS_PROMPT = ChatPromptTemplate.from_messages([
             ("system", SYSTEM_PROMPT),
-            ("human", "cv content\n{cv_text}job roles{job_matches}\n\n{format_instructions}")
-        ])
+            ("human", "raw cv content\n{raw_cv_content}")
+        ]).partial(
+            format_instructions = skill_extractor_parser.get_format_instructions()
+        )
         return EXTRACT_MISSING_SKILLS_PROMPT
     except Exception as e:
         RecommendationSystemError(

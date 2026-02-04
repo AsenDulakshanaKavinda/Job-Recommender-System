@@ -1,6 +1,6 @@
 
 from rec_system.client import load_llm_model
-from rec_system.prompts import load_missing_skills_extractor_prompt
+from rec_system.prompts import load_skills_extractor_prompt
 from rec_system.schemas import JobRecState, skill_extractor_parser
 from rec_system.utils import log, RecommendationSystemError
 
@@ -21,9 +21,9 @@ def extract_skills(job_rec_state: JobRecState) -> JobRecState:
 
     llm = load_llm_model()
     if not llm:
-        raise RuntimeError("Cannot load the llm in missing skill node.")
+        raise RuntimeError("Cannot load the llm in skill node.")
     
-    EXTRACT_SKILLS_PROMPT = load_missing_skills_extractor_prompt()
+    EXTRACT_SKILLS_PROMPT = load_skills_extractor_prompt()
     if not EXTRACT_SKILLS_PROMPT:
         log.error("Skill extractor prompt is missing.")
         raise ValueError("Skill extractor prompt is missing.")
@@ -31,12 +31,11 @@ def extract_skills(job_rec_state: JobRecState) -> JobRecState:
     chain = EXTRACT_SKILLS_PROMPT | llm | skill_extractor_parser
     
     try:
-        response = llm.invoke({
-            "cv_content": job_rec_state["raw_cv_content"],
-            "job_matches": job_rec_state["job_matches"]
+        response = chain.invoke({
+            "raw_cv_content": job_rec_state["raw_cv_content"],
+            "format_instructions": skill_extractor_parser.get_format_instructions()
         })
-        job_rec_state["extracted_skills"] = "something" # TODO: add real values for the response
-        job_rec_state["missing_skills"]= "something"
+        job_rec_state["extracted_skills"] = response.extracted_skills 
         return job_rec_state
     except Exception as e:
         RecommendationSystemError(

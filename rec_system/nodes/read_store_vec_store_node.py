@@ -14,7 +14,7 @@ from rec_system.schemas import JobRecState
 from rec_system.utils import documents_config, log, RecommendationSystemError
 
 
-def read_document(filepath: Path) -> List[Document]:
+def read_document(filepath: Path):
     """ 
     Read PDF documents in given filepath.
     
@@ -26,8 +26,9 @@ def read_document(filepath: Path) -> List[Document]:
     try:
         loader = PyPDFLoader(file_path=filepath)
         docs = loader.load()
+        content = "\n".join(d.page_content for d in docs)
         log.info(f"Reading document, loading: {len(docs)} docs.")
-        return docs
+        return docs, content
     except Exception as e:
         RecommendationSystemError(
             e,
@@ -90,14 +91,14 @@ def read_store_vec_db(job_rec_state: JobRecState) -> JobRecState:
     """ 
     Read and store data in a Vector DB
     """
-
-    job_rec_state["original_filepath"] = "sample_data/What-is-a-Heart-Attack.pdf"
     try:
-        if not job_rec_state["original_filepath"]:
+        filepath = job_rec_state.get("original_filepath")
+        if not filepath:
             log.error("Filepath is missing.")
             raise ValueError("Filepath is missing.")
         
-        docs = read_document(job_rec_state["original_filepath"])
+        docs, content = read_document(job_rec_state["original_filepath"])
+        job_rec_state["raw_cv_content"] = content
         chunks = split_docs(docs)
         store_to_vec_db(chunks)
         log.info("Storing info in vs is Completed.")

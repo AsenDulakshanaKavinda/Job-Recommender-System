@@ -21,20 +21,18 @@ Rules:
 
 Output a single paragraph summary.
 
+{format_instructions}
 
 """
 
 def load_summarizer_prompt():
     try:
-        format_instructions = summarizer_parser.get_format_instructions()
-        if not format_instructions:
-            log.error("Cannot create format instruction for the summarizer prompt.")
-            raise ValueError("format instruction error")
-
         SUMMARIZER_PROMPT = ChatPromptTemplate.from_messages([
             ("system", SYSTEM_PROMPT),
-            ("human", "cv content\n{cv_text}\n\n{format_instructions}")
-        ])
+            ("human", "raw cv content\n{raw_cv_content}")
+        ]).partial(
+            format_instructions = summarizer_parser.get_format_instructions()
+        )
         return SUMMARIZER_PROMPT
     except Exception as e:
         RecommendationSystemError(

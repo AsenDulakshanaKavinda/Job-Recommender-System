@@ -7,4 +7,5 @@ __all__ = [
     "JobRecState"
     "summarizer_parser"
     "custom_plan_parser"
+    "skill_extractor_parser"
 ]
