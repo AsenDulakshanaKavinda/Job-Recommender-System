@@ -36,6 +36,9 @@ def extract_skills(job_rec_state: JobRecState) -> JobRecState:
             "format_instructions": skill_extractor_parser.get_format_instructions()
         })
         job_rec_state["extracted_skills"] = response.extracted_skills 
+        # job_rec_state["missing_skills"] = response.missing_skills 
+        job_rec_state["missing_skills"] = "AI Engineering" 
+        print(job_rec_state)
         return job_rec_state
     except Exception as e:
         RecommendationSystemError(

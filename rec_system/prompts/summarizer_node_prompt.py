@@ -34,6 +34,7 @@ def load_summarizer_prompt():
             format_instructions = summarizer_parser.get_format_instructions()
         )
         return SUMMARIZER_PROMPT
+    
     except Exception as e:
         RecommendationSystemError(
             e,

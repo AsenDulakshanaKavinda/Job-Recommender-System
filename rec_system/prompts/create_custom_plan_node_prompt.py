@@ -2,26 +2,39 @@ from langchain_core.prompts import ChatPromptTemplate
 from rec_system.utils import log, RecommendationSystemError
 
 SYSTEM_PROMPT = """
-You are a senior technical mentor.
+You are a senior technical mentor helping a job seeker.
 
-Create a practical learning plan to close the identified skill gaps.
+Your task:
+- Analyze the missing skills.
+- Create a 30–60–90 day practical learning plan.
+- For each missing skill, call the tool `find_online_courses`
+  to get relevant online courses.
+- Use the returned courses as learning recommendations.
 
 Rules:
-- Focus on applied learning, not theory.
-- Use a 30–60–90 day structure.
-- Use given tools to extract online course
-- Use those courses as suggestions for users
+- Focus on hands-on, applied learning.
+- Avoid theory-heavy explanations.
+- Organize output clearly by:
+  - 30 days
+  - 60 days
+  - 90 days
+- Under each section, list:
+  - Skills to focus on
+  - Suggested courses (from tool results)
 
-Output in clear sections with bullet points with suggestions.
+Return the final output as a single structured plan.
+
+Context:
+raw_cv_content:
+{raw_cv_content}
+
+missing_skills:
+{missing_skills}
 """
 
 def load_create_custom_plan_prompt():
     try:
-        CREATE_CUSTOM_PLAN_PROMPT = ChatPromptTemplate.from_messages([
-            ("system", SYSTEM_PROMPT),
-            ("human", "cv content\n\n{cv_text}\ntarget job roles\n{target_job_roles}\nmissing skills\n{missing_skills}")
-        ])
-        return CREATE_CUSTOM_PLAN_PROMPT
+        return SYSTEM_PROMPT
     except Exception as e:
         RecommendationSystemError(
             e,

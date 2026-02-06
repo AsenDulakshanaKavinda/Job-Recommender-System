@@ -97,7 +97,7 @@ def read_store_vec_db(job_rec_state: JobRecState) -> JobRecState:
             log.error("Filepath is missing.")
             raise ValueError("Filepath is missing.")
         
-        docs, content = read_document(job_rec_state["original_filepath"])
+        docs, content = read_document(filepath)
         job_rec_state["raw_cv_content"] = content
         chunks = split_docs(docs)
         store_to_vec_db(chunks)
